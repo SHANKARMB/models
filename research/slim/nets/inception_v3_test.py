@@ -30,8 +30,8 @@ class InceptionV3Test(tf.test.TestCase):
 
   def testBuildClassificationNetwork(self):
     batch_size = 5
-    height, width = 299, 299
-    num_classes = 1000
+    height, width = 18, 18
+    num_classes = 6
 
     inputs = tf.random_uniform((batch_size, height, width, 3))
     logits, end_points = inception.inception_v3(inputs, num_classes)
@@ -45,7 +45,7 @@ class InceptionV3Test(tf.test.TestCase):
 
   def testBuildPreLogitsNetwork(self):
     batch_size = 5
-    height, width = 299, 299
+    height, width = 18, 18
     num_classes = None
 
     inputs = tf.random_uniform((batch_size, height, width, 3))
@@ -57,7 +57,7 @@ class InceptionV3Test(tf.test.TestCase):
 
   def testBuildBaseNetwork(self):
     batch_size = 5
-    height, width = 299, 299
+    height, width = 18, 18
 
     inputs = tf.random_uniform((batch_size, height, width, 3))
     final_endpoint, end_points = inception.inception_v3_base(inputs)
@@ -74,7 +74,7 @@ class InceptionV3Test(tf.test.TestCase):
 
   def testBuildOnlyUptoFinalEndpoint(self):
     batch_size = 5
-    height, width = 299, 299
+    height, width = 18, 18
     endpoints = ['Conv2d_1a_3x3', 'Conv2d_2a_3x3', 'Conv2d_2b_3x3',
                  'MaxPool_3a_3x3', 'Conv2d_3b_1x1', 'Conv2d_4a_3x3',
                  'MaxPool_5a_3x3', 'Mixed_5b', 'Mixed_5c', 'Mixed_5d',
@@ -92,7 +92,7 @@ class InceptionV3Test(tf.test.TestCase):
 
   def testBuildAndCheckAllEndPointsUptoMixed7c(self):
     batch_size = 5
-    height, width = 299, 299
+    height, width = 18, 18
 
     inputs = tf.random_uniform((batch_size, height, width, 3))
     _, end_points = inception.inception_v3_base(
@@ -124,7 +124,7 @@ class InceptionV3Test(tf.test.TestCase):
 
   def testModelHasExpectedNumberOfParameters(self):
     batch_size = 5
-    height, width = 299, 299
+    height, width = 18, 18
     inputs = tf.random_uniform((batch_size, height, width, 3))
     with slim.arg_scope(inception.inception_v3_arg_scope()):
       inception.inception_v3_base(inputs)
@@ -134,8 +134,8 @@ class InceptionV3Test(tf.test.TestCase):
 
   def testBuildEndPoints(self):
     batch_size = 5
-    height, width = 299, 299
-    num_classes = 1000
+    height, width = 18, 18
+    num_classes = 6
 
     inputs = tf.random_uniform((batch_size, height, width, 3))
     _, end_points = inception.inception_v3(inputs, num_classes)
@@ -158,8 +158,8 @@ class InceptionV3Test(tf.test.TestCase):
 
   def testBuildEndPointsWithDepthMultiplierLessThanOne(self):
     batch_size = 5
-    height, width = 299, 299
-    num_classes = 1000
+    height, width = 18, 18
+    num_classes = 6
 
     inputs = tf.random_uniform((batch_size, height, width, 3))
     _, end_points = inception.inception_v3(inputs, num_classes)
@@ -178,8 +178,8 @@ class InceptionV3Test(tf.test.TestCase):
 
   def testBuildEndPointsWithDepthMultiplierGreaterThanOne(self):
     batch_size = 5
-    height, width = 299, 299
-    num_classes = 1000
+    height, width = 18, 18
+    num_classes = 6
 
     inputs = tf.random_uniform((batch_size, height, width, 3))
     _, end_points = inception.inception_v3(inputs, num_classes)
@@ -198,8 +198,8 @@ class InceptionV3Test(tf.test.TestCase):
 
   def testRaiseValueErrorWithInvalidDepthMultiplier(self):
     batch_size = 5
-    height, width = 299, 299
-    num_classes = 1000
+    height, width = 18, 18
+    num_classes = 6
 
     inputs = tf.random_uniform((batch_size, height, width, 3))
     with self.assertRaises(ValueError):
@@ -209,8 +209,8 @@ class InceptionV3Test(tf.test.TestCase):
 
   def testHalfSizeImages(self):
     batch_size = 5
-    height, width = 150, 150
-    num_classes = 1000
+    height, width = 18, 18
+    num_classes = 6
 
     inputs = tf.random_uniform((batch_size, height, width, 3))
     logits, end_points = inception.inception_v3(inputs, num_classes)
@@ -224,8 +224,8 @@ class InceptionV3Test(tf.test.TestCase):
   def testUnknownImageShape(self):
     tf.reset_default_graph()
     batch_size = 2
-    height, width = 299, 299
-    num_classes = 1000
+    height, width = 18, 18
+    num_classes = 6
     input_np = np.random.uniform(0, 1, (batch_size, height, width, 3))
     with self.test_session() as sess:
       inputs = tf.placeholder(tf.float32, shape=(batch_size, None, None, 3))
@@ -241,8 +241,8 @@ class InceptionV3Test(tf.test.TestCase):
   def testGlobalPoolUnknownImageShape(self):
     tf.reset_default_graph()
     batch_size = 1
-    height, width = 330, 400
-    num_classes = 1000
+    height, width = 18, 18
+    num_classes = 6
     input_np = np.random.uniform(0, 1, (batch_size, height, width, 3))
     with self.test_session() as sess:
       inputs = tf.placeholder(tf.float32, shape=(batch_size, None, None, 3))
@@ -258,8 +258,8 @@ class InceptionV3Test(tf.test.TestCase):
 
   def testUnknowBatchSize(self):
     batch_size = 1
-    height, width = 299, 299
-    num_classes = 1000
+    height, width = 18, 18
+    num_classes = 6
 
     inputs = tf.placeholder(tf.float32, (None, height, width, 3))
     logits, _ = inception.inception_v3(inputs, num_classes)
@@ -275,8 +275,8 @@ class InceptionV3Test(tf.test.TestCase):
 
   def testEvaluation(self):
     batch_size = 2
-    height, width = 299, 299
-    num_classes = 1000
+    height, width = 18, 18
+    num_classes = 6
 
     eval_inputs = tf.random_uniform((batch_size, height, width, 3))
     logits, _ = inception.inception_v3(eval_inputs, num_classes,
@@ -291,8 +291,8 @@ class InceptionV3Test(tf.test.TestCase):
   def testTrainEvalWithReuse(self):
     train_batch_size = 5
     eval_batch_size = 2
-    height, width = 150, 150
-    num_classes = 1000
+    height, width = 18, 18
+    num_classes = 6
 
     train_inputs = tf.random_uniform((train_batch_size, height, width, 3))
     inception.inception_v3(train_inputs, num_classes)
@@ -307,7 +307,7 @@ class InceptionV3Test(tf.test.TestCase):
       self.assertEquals(output.shape, (eval_batch_size,))
 
   def testLogitsNotSqueezed(self):
-    num_classes = 25
+    num_classes = 6
     images = tf.random_uniform([1, 299, 299, 3])
     logits, _ = inception.inception_v3(images,
                                        num_classes=num_classes,
