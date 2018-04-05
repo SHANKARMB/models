@@ -23,5 +23,5 @@ setup(
     version='0.1',
     include_package_data=True,
     packages=find_packages(),
-    description='tf-slim',
+    description='tf-slim', install_requires=['tensorflow']
 )

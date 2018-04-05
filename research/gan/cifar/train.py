@@ -27,15 +27,15 @@ import networks
 tfgan = tf.contrib.gan
 flags = tf.flags
 
-flags.DEFINE_integer('batch_size', 32, 'The number of images in each batch.')
+flags.DEFINE_integer('batch_size', 6, 'The number of images in each batch.')
 
 flags.DEFINE_string('master', '', 'Name of the TensorFlow master to use.')
 
-flags.DEFINE_string('train_log_dir', '/tmp/cifar/',
+flags.DEFINE_string('train_log_dir', '/home/prime/ProjectWork/training/trained/gan/airplane',
                     'Directory where to write event logs.')
 
-flags.DEFINE_string('dataset_dir', None, 'Location of data.')
-
+flags.DEFINE_string('dataset_dir', "/home/prime/ProjectWork/training/dataset/gan_tfrecord", 'Location of data.')
+flags.DEFINE_string('dataset_name', 'gan_images', 'dataset_name')
 flags.DEFINE_integer('max_number_of_steps', 1000000,
                      'The maximum number of gradient steps.')
 
@@ -72,6 +72,7 @@ FLAGS = flags.FLAGS
 
 
 def main(_):
+
   if not tf.gfile.Exists(FLAGS.train_log_dir):
     tf.gfile.MakeDirs(FLAGS.train_log_dir)
 
@@ -81,10 +82,13 @@ def main(_):
     with tf.name_scope('inputs'):
       with tf.device('/cpu:0'):
         images, one_hot_labels, _, _ = data_provider.provide_data(
-            FLAGS.batch_size, FLAGS.dataset_dir)
-
+            FLAGS.batch_size, FLAGS.dataset_dir,  FLAGS.dataset_name)
+    print('dataset_name:', FLAGS.dataset_name, '  dataset_dir:', FLAGS.dataset_dir)
+    print("after provide_data")
+    print("images", images)
     # Define the GANModel tuple.
     noise = tf.random_normal([FLAGS.batch_size, 64])
+
     if FLAGS.conditional:
       generator_fn = networks.conditional_generator
       discriminator_fn = networks.conditional_discriminator
@@ -93,6 +97,8 @@ def main(_):
       generator_fn = networks.generator
       discriminator_fn = networks.discriminator
       generator_inputs = noise
+
+    # import pdb;pdb.set_trace()
     gan_model = tfgan.gan_model(
         generator_fn,
         discriminator_fn,
