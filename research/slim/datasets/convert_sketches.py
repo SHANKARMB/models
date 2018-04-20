@@ -98,7 +98,7 @@ def _get_filenames_and_classes(dataset_dir):
 def _get_dataset_filename(dataset_dir, split_name, shard_id):
     output_filename = 'sketches_%s_%03d-of-%03d.tfrecord' % (
         split_name, shard_id, _NUM_SHARDS)
-    return os.path.join(dataset_dir, output_filename)
+    return os.path.join(dataset_dir, 'cnn_images_tfrecords', output_filename)
 
 
 def _convert_dataset(split_name, filenames, class_names_to_ids, dataset_dir):
@@ -157,15 +157,15 @@ def run(dataset_dir):
         tf.gfile.MakeDirs(dataset_dir)
 
     # dataset_utils.download_and_uncompress_tarball(_DATA_URL, dataset_dir)
-    photo_filenames, class_names = _get_filenames_and_classes(dataset_dir)
+    photo_filenames, class_names = _get_filenames_and_classes(os.path.join(dataset_dir, 'cnn_images'))
     class_names_to_ids = dict(zip(class_names, range(len(class_names))))
 
     # Divide into train and test:
     random.seed(_RANDOM_SEED)
     random.shuffle(photo_filenames)
-    training_filenames = photo_filenames[2*_NUM_VALIDATION:]
+    training_filenames = photo_filenames[2 * _NUM_VALIDATION:]
     validation_filenames = photo_filenames[:_NUM_VALIDATION]
-    test_filenames = photo_filenames[_NUM_VALIDATION:2*_NUM_VALIDATION]
+    test_filenames = photo_filenames[_NUM_VALIDATION:2 * _NUM_VALIDATION]
 
     # First, convert the training and validation sets.
     _convert_dataset('train', training_filenames, class_names_to_ids,
