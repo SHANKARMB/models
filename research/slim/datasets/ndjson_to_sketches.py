@@ -1,5 +1,5 @@
 from PIL import Image
-from jsonlines import open, jsonlines
+from jsonlines import jsonlines
 import os
 import urllib
 import random
@@ -82,7 +82,7 @@ for i in ndjson_list:
     print('downloading ', i, ' -> ', file_url)
     r = requests.get(file_url)
     file_name = i + '.ndjson'
-    with open(file_name, 'w', encoding='utf-8') as f:
+    with open(file_name, mode='wb') as f:
         f.write(r.content)
 
 # _______________________________________________________________________--------------------------------------_____________________________
