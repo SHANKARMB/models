@@ -61,7 +61,8 @@ def get_line(x1, y1, x2, y2):
     return points
 
 
-rootDir = '/content/training/dataset'  # root dir
+# rootDir = '/content/training/dataset'  # root dir
+rootDir = '/home/prime/ProjectWork/training/dataset'
 current_dataset = os.path.join(rootDir, 'ndjson')  # path where ndjson files exists relative to root dir
 final_dir = os.path.join(rootDir, 'cnn_images')  # final path where images are store relative to root dir
 
@@ -81,7 +82,7 @@ for i in ndjson_list:
     print('downloading ', i, ' -> ', file_url)
     r = requests.get(file_url)
     file_name = i + '.ndjson'
-    with open(file_name, 'w') as f:
+    with open(file_name, 'w', encoding='utf-8') as f:
         f.write(r.content)
 
 # _______________________________________________________________________--------------------------------------_____________________________
