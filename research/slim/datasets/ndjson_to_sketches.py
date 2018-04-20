@@ -1,7 +1,9 @@
-import os
 from PIL import Image
 from jsonlines import open, jsonlines
 import os
+import urllib
+import random
+import requests
 
 
 def create_image(image, filename):
@@ -59,18 +61,42 @@ def get_line(x1, y1, x2, y2):
     return points
 
 
-rootDir = '/home/prime/ProjectWork/training/dataset'  # root dir
-current_dataset = os.path.join(rootDir, '22gb/ndjson')  # path where ndjson files exists relative to root dir
+rootDir = '/content/training/dataset'  # root dir
+current_dataset = os.path.join(rootDir, 'ndjson')  # path where ndjson files exists relative to root dir
 final_dir = os.path.join(rootDir, 'cnn_images')  # final path where images are store relative to root dir
 
 os.chdir(rootDir)
-labels = []
+
+# ______________________________________________________________________---------------------------------------____________________________
+
+
+root_path = 'https://storage.googleapis.com/quickdraw_dataset/full/simplified'
+
+# just names
+ndjson_list = ['airplane', 'hot air balloon', 'snake', 'pineapple', 'butterfly',
+               'knife', 'wine bottle', 'apple', 'hamburger', 'scissors']
+
+for i in ndjson_list:
+    file_url = os.path.join(root_path, urllib.parse.quote(i) + '.ndjson')
+    print('downloading ', i, ' -> ', file_url)
+    r = requests.get(file_url)
+    file_name = i + '.ndjson'
+    with open(file_name, 'wb') as f:
+        f.write(r.content)
+
+# _______________________________________________________________________--------------------------------------_____________________________
+
+
 for ndj_file in os.listdir(current_dataset):
     folder = os.path.join(final_dir, os.path.splitext(os.path.basename(ndj_file))[0])
     os.makedirs(folder, exist_ok=True)
+    file_name = 0
     count = 0
+    x = random.sample(range(100000), 11000)
     with jsonlines.open(os.path.join(current_dataset, ndj_file), mode='r') as reader:
         for obj in reader:
-            create_image(obj['drawing'], os.path.join(folder, str(count) + '.jpg'))
+            if count in x:
+                create_image(obj['drawing'], os.path.join(folder, str(file_name) + '.jpg'))
+                file_name = file_name + 1
             count = count + 1
     print(ndj_file, 'done')
