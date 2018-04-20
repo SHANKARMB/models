@@ -82,7 +82,7 @@ for i in ndjson_list:
     print('downloading ', i, ' -> ', file_url)
     r = requests.get(file_url)
     file_name = i + '.ndjson'
-    with open(file_name, mode='wb') as f:
+    with open(os.path.join(current_dataset, file_name), mode='wb') as f:
         f.write(r.content)
 
 # _______________________________________________________________________--------------------------------------_____________________________
