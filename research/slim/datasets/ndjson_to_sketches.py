@@ -81,7 +81,7 @@ for i in ndjson_list:
     print('downloading ', i, ' -> ', file_url)
     r = requests.get(file_url)
     file_name = i + '.ndjson'
-    with open(file_name, 'wb') as f:
+    with open(file_name, 'w') as f:
         f.write(r.content)
 
 # _______________________________________________________________________--------------------------------------_____________________________
